@@ -24,6 +24,9 @@
 
 # Load libraries and data
 library('ggplot2')    # We'll use ggplot2 for all of our visualizations
+library('scales')
+library('plyr')
+
 
 # This is a tab-delimited file, so we use 'read.delim' and set the separator as a tab character.
 # We also have to alter two defaults; first, we want the strings to not be converted to
@@ -123,7 +126,7 @@ head(ufo.us)
 # We can do this by creating a histogram of frequencies for UFO sightings over time
 quick.hist <- ggplot(ufo.us, aes(x = DateOccurred)) +
   geom_histogram() + 
-  scale_x_date(major = "50 years")
+  scale_x_date(breaks = date_breaks("50 years"), labels = date_format("%Y"))
 ggsave(plot = quick.hist,
        filename = file.path("images", "quick_hist.pdf"),
        height = 6,
@@ -136,7 +139,7 @@ ufo.us <- subset(ufo.us, DateOccurred >= as.Date("1990-01-01"))
 # Let's look at the histogram now
 new.hist <- ggplot(ufo.us, aes(x = DateOccurred)) +
   geom_histogram() +
-  scale_x_date(major = "50 years")
+  scale_x_date(breaks = date_breaks("50 years"), labels = date_format("%Y"))
 ggsave(plot = new.hist,
        filename = file.path("images", "new_hist.pdf"),
        height = 6,
@@ -202,7 +205,7 @@ state.plot <- ggplot(all.sightings, aes(x = YearMonth,y = Sightings)) +
   facet_wrap(~State, nrow = 10, ncol = 5) + 
   theme_bw() + 
   scale_color_manual(values = c("darkblue" = "darkblue"), legend = FALSE) +
-  scale_x_date(major = "5 years", format = "%Y") +
+  scale_x_date(breaks = date_breaks("5 years"), labels = date_format("%Y")) +
   xlab("Time") +
   ylab("Number of Sightings") +
   opts(title = "Number of UFO sightings by Month-Year and U.S. State (1990-2010)")
