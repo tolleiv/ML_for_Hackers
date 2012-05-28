@@ -245,45 +245,57 @@ data.file <- file.path('data', '01_heights_weights_genders.csv')
 heights.weights <- read.csv(data.file, header = TRUE, sep = ',')
 
 # Experiment with histograms.
-ggplot(heights.weights, aes(x = Height)) +
+snip20.plot <- ggplot(heights.weights, aes(x = Height)) +
   geom_histogram(binwidth = 1)
+ggsave(filename = file.path("images", "snip20.pdf"))
+
 
 #
 # Snippet 21
 #
 
-ggplot(heights.weights, aes(x = Height)) +
+snip21.plot <- ggplot(heights.weights, aes(x = Height)) +
   geom_histogram(binwidth = 5)
+ggsave(filename = file.path("images", "snip21.pdf"))
+
 
 #
 # Snippet 22
 #
 
-ggplot(heights.weights, aes(x = Height)) +
+snip22.plot <- ggplot(heights.weights, aes(x = Height)) +
   geom_histogram(binwidth = 0.001)
+ggsave(filename = file.path("images", "snip22.pdf"))
+
 
 #
 # Snippet 23
 #
 
 # Experiment with kernel density estimates.
-ggplot(heights.weights, aes(x = Height)) +
+snip23.plot <- ggplot(heights.weights, aes(x = Height)) +
   geom_density()
+ggsave(filename = file.path("images", "snip23.pdf"))
+
 
 #
 # Snippet 24
 #
 
 # Separate out heights and weights based on gender.
-ggplot(heights.weights, aes(x = Height, fill = Gender)) +
+snip24.plot <- ggplot(heights.weights, aes(x = Height, fill = Gender)) +
   geom_density()
+ggsave(filename = file.path("images", "snip24.pdf"))
+
 
 #
 # Snippet 25
 #
 
-ggplot(heights.weights, aes(x = Weight, fill = Gender)) +
+snip25.plot <- ggplot(heights.weights, aes(x = Weight, fill = Gender)) +
   geom_density()
+ggsave(filename = file.path("images", "snip25.pdf"))
+
 
 #
 # Snippet 26
@@ -293,6 +305,8 @@ ggplot(heights.weights, aes(x = Weight, fill = Gender)) +
 ggplot(heights.weights, aes(x = Weight, fill = Gender)) +
   geom_density() +
   facet_grid(Gender ~ .)
+ggsave(filename = file.path("images", "snip26.pdf"))
+
 
 #
 # Snippet 27
@@ -301,8 +315,11 @@ ggplot(heights.weights, aes(x = Weight, fill = Gender)) +
 # Experiment with random numbers from the normal distribution.
 m <- 0
 s <- 1
-ggplot(data.frame(X = rnorm(100000, m, s)), aes(x = X)) +
+snip27.plot<-ggplot(data.frame(X = rnorm(100000, m, s)), aes(x = X)) +
   geom_density()
+ggsave(filename = file.path("images", "snip27.pdf"))
+
+
 
 #
 # Snippet 28
@@ -324,31 +341,48 @@ ggplot(data.frame(X = normal.values), aes(x = X)) +
 ggplot(data.frame(X = cauchy.values), aes(x = X)) +
   geom_density()
 
+set.seed(1234)
+df = rbind(
+    data.frame(X=rnorm(250, 0, 1), d="norm"),
+    data.frame(X=rcauchy(250, 0, 1), d="cauchy"),
+    data.frame(X=rbinom(250, 0, 1), d="binom"),
+    data.frame(X=rpois(250, lambda=1), d="pois")
+)
+snip29.plot <- ggplot(df, aes(x=X)) + geom_density(aes(colour=d))  + facet_grid(d ~ .)
+ggsave(filename = file.path("images", "snip29.pdf"))
+
+
 #
 # Snippet 30
 #
 
 # Experiment with random numbers from the gamma distribution.
 gamma.values <- rgamma(100000, 1, 0.001)
-ggplot(data.frame(X = gamma.values), aes(x = X)) +
+snip30.plot <- ggplot(data.frame(X = gamma.values), aes(x = X)) +
   geom_density()
+ggsave(filename = file.path("images", "snip30.pdf"))
+
 
 #
 # Snippet 31
 #
 
 # Generate scatterplots of the heights and weights to see their relationship.
-ggplot(heights.weights, aes(x = Height, y = Weight)) +
+snip31.plot <- ggplot(heights.weights, aes(x = Height, y = Weight)) +
   geom_point()
+ggsave(filename = file.path("images", "snip31.pdf"))
+
 
 #
 # Snippet 32
 #
 
 # Add a smooth shape that relates the two explicitly.
-ggplot(heights.weights, aes(x = Height, y = Weight)) +
+snip32.plot <- ggplot(heights.weights, aes(x = Height, y = Weight)) +
   geom_point() +
   geom_smooth()
+ggsave(filename = file.path("images", "snip32.pdf"))
+
 
 #
 # Snippet 33
@@ -365,20 +399,34 @@ ggplot(heights.weights[1:2000, ], aes(x = Height, y = Weight)) +
   geom_point() +
   geom_smooth()
 
+df = rbind(
+    data.frame(heights.weights[1:20, ], d="Small"),
+    data.frame(heights.weights[1:200, ], d="Medium"),
+    data.frame(heights.weights[1:2000, ], d="Large")
+)
+ggplot(df, aes(x = Height, y = Weight)) +
+  geom_point(aes(colour=d)) +
+  facet_grid(d ~ .) +
+  geom_smooth()
+ggsave(filename = file.path("images", "snip33.pdf"))
+
 #
 # Snippet 34
 #
 
 # Visualize how gender depends on height and weight.
-ggplot(heights.weights, aes(x = Height, y = Weight)) +
+snip34.plot <- ggplot(heights.weights, aes(x = Height, y = Weight)) +
   geom_point(aes(color = Gender, alpha = 0.25)) +
-  scale_alpha(legend = FALSE) + 
+  scale_alpha(guide="none") +
   scale_color_manual(values = c("Male" = "black", "Female" = "gray")) +
   theme_bw()
+ggsave(filename = file.path("images", "snip34.pdf"))
+
 
 # An alternative using bright colors.
-ggplot(heights.weights, aes(x = Height, y = Weight, color = Gender)) +
+snip34a.plot <- ggplot(heights.weights, aes(x = Height, y = Weight, color = Gender)) +
   geom_point()
+ggsave(filename = file.path("images", "snip34a.pdf"))
 
 #
 # Snippet 35
@@ -391,12 +439,13 @@ logit.model <- glm(Male ~ Weight + Height,
                    data = heights.weights,
                    family = binomial(link = 'logit'))
 
-ggplot(heights.weights, aes(x = Height, y = Weight)) +
+snip35.plot <- ggplot(heights.weights, aes(x = Height, y = Weight)) +
   geom_point(aes(color = Gender, alpha = 0.25)) +
-  scale_alpha(legend = FALSE) + 
+  scale_alpha(guide="none") +
   scale_color_manual(values = c("Male" = "black", "Female" = "gray")) +
   theme_bw() +
   stat_abline(intercept = -coef(logit.model)[1] / coef(logit.model)[2],
               slope = - coef(logit.model)[3] / coef(logit.model)[2],
               geom = 'abline',
               color = 'black')
+ggsave(filename = file.path("images", "snip35.pdf"))
