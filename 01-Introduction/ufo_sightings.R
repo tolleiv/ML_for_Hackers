@@ -139,7 +139,7 @@ ufo.us <- subset(ufo.us, DateOccurred >= as.Date("1990-01-01"))
 # Let's look at the histogram now
 new.hist <- ggplot(ufo.us, aes(x = DateOccurred)) +
   geom_histogram() +
-  scale_x_date(breaks = date_breaks("50 years"), labels = date_format("%Y"))
+  scale_x_date(breaks = date_breaks("5 years"), labels = date_format("%Y"))
 ggsave(plot = new.hist,
        filename = file.path("images", "new_hist.pdf"),
        height = 6,
@@ -204,7 +204,7 @@ state.plot <- ggplot(all.sightings, aes(x = YearMonth,y = Sightings)) +
   geom_line(aes(color = "darkblue")) +
   facet_wrap(~State, nrow = 10, ncol = 5) + 
   theme_bw() + 
-  scale_color_manual(values = c("darkblue" = "darkblue"), legend = FALSE) +
+  scale_color_manual(values = c("darkblue" = "darkblue"), guide="none") +
   scale_x_date(breaks = date_breaks("5 years"), labels = date_format("%Y")) +
   xlab("Time") +
   ylab("Number of Sightings") +
